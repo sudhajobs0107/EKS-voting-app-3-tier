@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: sudha
+  labels:
+    role: frontend
+    env: demo
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
+  selector:
+    matchLabels:
+      role: frontend
+  template:
+    metadata:
+      labels:
+        role: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: sudhajobs0107/3-tier-frontend:latest  #change image name
+        imagePullPolicy: Always
+        env:
+          - name: REACT_APP_APIHOSTPORT
+            value: aa00164c0518041098c478e090c33bc6-783999949.us-east-2.elb.amazonaws.com #Here add your API_Load_Balancer manually
+        ports:
+        - containerPort: 80
