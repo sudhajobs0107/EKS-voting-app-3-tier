@@ -8,11 +8,23 @@ class VoteApp extends Component {
         <div class="jumbotron">
           <div class="container">
             <h1 class="display-3">Language Vote App v1</h1>
-            &copy; Mr cloud book ❤ Ajay 2023
+            &copy; CloudAcademy ❤ Sudha 2024
           </div>
         </div>
 
         <div class="container">
+          <div className="row">
+            <div className="col-md-4">
+              <ProgrammingLanguage id="csharp" logo="csharp.jpg"/>
+            </div>
+            <div className="col-md-4">
+              <ProgrammingLanguage id="python" logo="python.png"/>
+            </div>
+            <div className="col-md-4">
+              <ProgrammingLanguage id="javascript" logo="javascript.png"/>
+            </div>
+          </div>
+          <hr></hr>
           <div class="row">
             <div class="col-md-4">
               <ProgrammingLanguage id="go" logo="go.png"/>
