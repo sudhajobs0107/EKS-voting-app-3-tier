@@ -7,7 +7,7 @@ class ProgrammingLanguage extends Component {
     super();
 
     //configure the APIHOSTPORT, this is the public IP address of the host that the API server is running on
-    this.APIHOSTPORT = `${process.env.REACT_APP_APIHOSTPORT}`;
+    this.APIHOSTPORT = 'Here add your API-EXTERNAL-IP'
 
     this.state = {
       language: {},
@@ -17,7 +17,7 @@ class ProgrammingLanguage extends Component {
 
   componentDidMount () {
     //provide implementation to request language details for current language from the API server
-    axios.get(`http://${this.APIHOSTPORT}/languages/${this.props.id}`).then(
+    axios.get(`http://Here add your API-EXTERNAL-IP/languages/${this.props.id}`).then(
       response => this.setState({
         language: response.data,
         loaded: true
