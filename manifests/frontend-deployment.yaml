@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: sudhajobs0107/3-tier-frontend:latest  #change image name
+        image: sudhajobs0107/voting-app-frontend:latest  #change image name
         imagePullPolicy: Always
         env:
           - name: REACT_APP_APIHOSTPORT
