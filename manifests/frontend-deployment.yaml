@@ -27,6 +27,6 @@ spec:
         imagePullPolicy: Always
         env:
           - name: REACT_APP_APIHOSTPORT
-            value: aa00164c0518041098c478e090c33bc6-783999949.us-east-2.elb.amazonaws.com #Here add your API_Load_Balancer manually
+            value: aa00164c0518041098c478e090c33bc6-783999949.us-east-2.elb.amazonaws.com #Here add your API_EXTERNAL_IP manually
         ports:
         - containerPort: 80
