@@ -1,5 +1,5 @@
 # **3-Tier-Language-Vote-App Project :smile:**
-### In this project we will deploy a 3-Tier-Language-Vote-App using K8s. 
+## In this project we will deploy a 3-Tier-Language-Vote-App using AWS EKS. 
 ___
 # Prerequisites
 ### Before starting the project you should have these things in your system :-
@@ -11,9 +11,8 @@ ___
 + ### Create AWS EC2 instance
 ![Name](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/name.PNG)
 ![Launch](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/launch.PNG)
-![Key](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/key.PNG)
 ![Instance](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/instance.PNG)
-+ ### Connect to instance through SSH
++ ### Connect this instance through SSH
 + ### After successfully connecting to the EC2 instance, it will look like this
 ![Connect Interface](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/ssh.PNG)
 ___
@@ -25,7 +24,7 @@ git clone https://github.com/sudhajobs0107/EKS-voting-app-3-tier.git
 ![Git-Clone](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/git-clone.PNG)
 ___
 ## STEP 3: Build & Push API Image To ECR
-+ ### Now we will build API. So first we will install docker for this use command :-
++ ### Now we will build API image. So first we will install docker for this use command :-
 ```
 sudo apt install docker.io -y
 ```
@@ -35,11 +34,11 @@ sudo usermod -aG docker $USER
 ```
 sudo reboot
 ```
-### Now we will make **Dockerfile**, so go to API directory and write command :-
++ ### Now we will make **Dockerfile**, so go to API directory and write command :-
 ```
 vim Dockerfile
 ```
-### Now write code as shown below :-
++ ### Now write code as shown below :-
 ```
 # Use an official Golang runtime as a parent image
 FROM golang:1.17 as build
@@ -66,18 +65,22 @@ EXPOSE 8080
 # Command to run your application
 CMD ["/app/main"]
 ```
-### Now we have to build "**Docker Image**" from "**Dockerfile**", for this we use command as shown below:-
++ ### Now we have to build "**Docker Image**" from "**Dockerfile**", for this we use command as shown below:-
 
 ```
 docker build . -t voting-app-api
 ```
 ![API-Dockerfile](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/api-dockerfile.PNG)
-### Now docker image build see in image given below :-
++ ### Now docker image build see in image given below :-
 ![API-image](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/api-image.PNG)
 + ### Now we will store our image to ECR or DockerHub, so for ECR: Go to ECR → Create repository → select Public → name of repository → Create repository. Now commands to push image :-
 ```
 (run command where API dockerfile is)
-aws ecr
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/g1z2u9v4
+
+docker tag voting-app-api:latest public.ecr.aws/g1z2u9v4/voting-app-api:latest
+
+docker push public.ecr.aws/g1z2u9v4/voting-app-api:latest
 ```
 + ### We pushed our API image to ECR succesfully.
 ![ECR](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/ECR.PNG)
@@ -121,7 +124,7 @@ eksctl create cluster --name voting-app-eks-cluster --region us-west-2 --node-ty
 ![Create-Cluster](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/create-cluster.PNG)
 ![Cluster](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/cluster.PNG)
 + ### Now go cluster “Add-ons” → Click “Get more add-ons” → select "Amazon EBS CSI Driver"
-![Get-More-Ons](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/get-more-on.PNG)
+![Get-More-Ons](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/get-more-ons.PNG)
 ![Add-On](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/add-on.PNG)
 + ### Now click “Next” → again “Next” → Click “Create”.
 + ### Now add 1 policy in Node IAM role. Go to node and click “IAM role” → click "Attach Policy" → search "**AmazonEBSCSIDriverPolicy**" and add this Policy.
@@ -220,7 +223,7 @@ spec:
 ```
 + ### Now to apply a Mongo stateful set with Persistent volumes, run the command :-
 ```
-#to apply manifest file
+#to apply mongo-statefulset manifest file
 kubectl apply -f mongo-statefulset.yaml
 ```
 ![Mongo-State](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/mongo-state.PNG)
@@ -254,7 +257,6 @@ spec:
   ports:
   - port: 27017
     targetPort: 27017
-  clusterIP: None
   selector:
     role: db
 ```
@@ -329,10 +331,10 @@ metadata:
   name: mongodb-secret
   namespace: sudha
 data:
-  username: c3VkaGEK    [change this while doing project]
-  password: eWFkYXYK   [change this while doing project]
+  username: c3VkaGEK   
+  password: eWFkYXYK   
 ```
-+ ### In mongo-secret.yaml file we will write encryted password so how we can make encrypted password. Write echo 'sudha' | base64 and enter and we get our encryted username or password. Now how we can decode it? For this write echo 'encrypted username or password' | base64 --decode and we will get our real username or password ]
++ ### **In mongo-secret.yaml file we will write encryted password so how we can make encrypted password. Write echo 'sudha' | base64 and enter and we get our encryted username or password. Now how we can decode it? For this write echo 'encrypted username or password' | base64 --decode and we will get our real username or password.**
 + ### Now to apply a mongo-secret yaml file, run the command :-
 ```
 kubectl apply -f mongo-sercet.yaml
@@ -372,7 +374,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: api_ECR_image_link [change later]
+        image: sudhajobs0107/voting-app-api:latest #change image name
         imagePullPolicy: Always
         env:
           - name: MONGO_CONN_STR
@@ -435,7 +437,7 @@ spec:
       targetPort: 8080
   type: LoadBalancer
 ```
-+ ### Now to apply a api-service yaml file, run the command :-
++ ### Now we can apply api-service yaml file or directly expose, run the command :-
 ```
 kubectl apply -f api-service.yaml (and)
 kubectl get svc
@@ -492,12 +494,8 @@ CMD ["nginx", "-g", "daemon off;"]
 docker build . -t voting-app-frontend
 ```
 ![Frontend-Image](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/frontend-image.PNG)
-+ ### Now we will store our image to ECR or DockerHub, so for ECR: Go to ECR → Create repository → select Public → name of repository → Create repository. Now commands to push image :-
-```
-(run command where API dockerfile is)
-aws ecr
-```
-+ ### We pushed our frontend image succesfully.
++ ### Now same as api we will store our image to ECR or DockerHub, so for ECR: Go to ECR → Create repository → select Public → name of repository → Create repository and push image to ECR.
++ ### See here we pushed our frontend image succesfully.
 ![Frontend-ECR](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/frontend-ecr.PNG)
 
 + ### Now we will create a Frontend deployment yaml file so for this use command :-
@@ -541,7 +539,6 @@ spec:
 ```
 + ### Now to apply a frontend deployment file, run the command :-
 ```
-#to apply manifest file
 kubectl apply -f frontend-deployment.yaml
 ```
 ![Frontend-Apply](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/frontend-apply.PNG)
@@ -574,7 +571,7 @@ spec:
       targetPort: 80
   type: LoadBalancer
 ```
-+ ### Now to apply frontend-service yaml file, run the command :-
++ ### Now we can apply frontend-service yaml file or directly expose, run the command :-
 ```
 kubectl apply -f frontnend-service.yaml
 kubectl get svc -n sudha
@@ -591,7 +588,7 @@ curl -I $FRONTEND_ELB_PUBLIC_FQDN
 }
 ```
 ![Frontend-lb-OK](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/frontend-lb-ok.PNG)
-+ ### Now generate the Frontend URL for browsing. In the terminal run the following command:
++ ### Now generate the Frontend URL for browsing. In the terminal run the following command:-
 ```
 echo http://$FRONTEND_ELB_PUBLIC_FQDN
 ```
