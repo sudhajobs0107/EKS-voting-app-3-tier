@@ -1,5 +1,6 @@
 # **3-Tier-Language-Vote-App Project :smile:**
-## In this project we will deploy a 3-Tier-Language-Vote-App using AWS EKS. 
+## In this project we will deploy a 3-Tier-Language-Vote-App using AWS EKS.
+![3-tier](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/3-tier.PNG)
 ___
 # Prerequisites
 ### Before starting the project you should have these things in your system :-
