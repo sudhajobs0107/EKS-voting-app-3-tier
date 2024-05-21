@@ -158,7 +158,7 @@ kubectl config set-context --current --namespace sudha
 + ### After running this command, any subsequent kubectl commands we execute will be scoped to the **sudha** namespace, unless we specify a different namespace explicitly in our commands. This can be particularly useful when we have multiple namespaces in our Kubernetes cluster and we want to ensure that our operations are isolated to a specific namespace.
 ![NS-Context](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/ns-context.PNG)
 ```
-kubectl create statefulset.yaml
+vim mongo-statefulset.yaml
 ```
 ```
 # mongo-stateful set yaml file
@@ -242,7 +242,7 @@ kubectl get pvc
 ![Mongo-PVC](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/mongo-pvc.PNG)
 + ### Now we will create a mongo-service yaml file, write command :-
 ```
-kubectl create mongo-service.yaml
+vim mongo-service.yaml
 ```
 ```
 # mongo-service yaml file
@@ -322,7 +322,7 @@ kubectl exec -it mongo-0 -- mongo --eval "rs.status()" | grep "PRIMARY\|SECONDAR
 ![Pri-Sec-Sec](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/pri-sec-sec.PNG)
 + ### Now we will create a mongo-secret yaml file, write command :-
 ```
-kubectl create mongo-secret.yaml
+vim mongo-secret.yaml
 ```
 ```
 # mongo-secret yaml file
@@ -346,7 +346,7 @@ ___
 ## STEP 6: Setup & Run API
 + ### Now we will create a API deployment yaml file so for this use command :-
 ```
-kubectl create api-deployment.yaml
+vim api-deployment.yaml
 ```
 ```
 # api-deployment yaml file
@@ -417,7 +417,7 @@ kubectl get all
 ![API-Pod](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/api-pod.PNG)
 + ### Now we will create a api-service yaml file, write command :-
 ```
-kubectl create api-service.yaml
+vim api-service.yaml
 ```
 ```
 # api-service yaml file
@@ -501,7 +501,7 @@ docker build . -t voting-app-frontend
 
 + ### Now we will create a Frontend deployment yaml file so for this use command :-
 ```
-kubectl create frontend-deployment.yaml
+vim frontend-deployment.yaml
 ```
 ```
 # api-deployment yaml file
@@ -551,7 +551,7 @@ kubectl get all
 ![Frontend-Pod](https://github.com/sudhajobs0107/EKS-voting-app-3-tier/blob/main/doc/images/frontend-pod.PNG)
 + ### Now we will create a frontend-service yaml file, write command :-
 ```
-kubectl create frontend-service.yaml
+vim frontend-service.yaml
 ```
 ```
 # frontend-service yaml file
